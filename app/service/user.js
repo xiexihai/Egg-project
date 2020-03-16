@@ -11,8 +11,8 @@ class UserService extends Service {
   */
   async register(params) {
     try {
-      params.create_time = datetime.format(new Date(), 'YYYY-MM-DD HH:mm');
-      const result = await this.app.mysql.insert('user', params);
+      params.created_time = datetime.format(new Date(), 'YYYY-MM-DD HH:mm');
+      const result = await this.app.mysql.insert('tb_user', params);
       const data = result.affectedRows === 1;
       return data;
     } catch (err) {
@@ -25,7 +25,9 @@ class UserService extends Service {
    * @return { array } 用户列表
   */
   async getUserList() {
-    return await this.app.mysql.select('user');
+    return await this.app.mysql.select('tb_user', {
+      orders: [[ 'created_time', 'desc' ]],
+    });
   }
 
   /* @description 根据用户名查找单个用户数据
@@ -33,7 +35,7 @@ class UserService extends Service {
    * @return { object } 用户信息
   */
   async getUserOneByUserName(username) {
-    return await this.app.mysql.get('user', { username });
+    return await this.app.mysql.get('tb_user', { username });
   }
 
   /* @description 登录
@@ -43,7 +45,7 @@ class UserService extends Service {
   */
   async login(params) {
     try {
-      return await this.app.mysql.get('user', params);
+      return await this.app.mysql.get('tb_user', params);
     } catch (err) {
       this.logger.error(err);
       return null;

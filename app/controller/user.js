@@ -110,6 +110,10 @@ class UserController extends Controller {
       const result = await ctx.service.user.login(params);
       code = result ? 200 : 400;
       msg = result ? '登录成功' : '密码错误';
+      if (result) {
+        const token = this.app.jwt.sign(result.uid, this.app.jwt.secret, { expiresIn: 60 });
+        result.token = token;
+      }
       ctx.body = {
         code,
         msg,

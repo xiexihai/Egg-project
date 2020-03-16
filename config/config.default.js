@@ -33,6 +33,15 @@ module.exports = appInfo => {
     agent: false,
   };
 
+  // session
+  // config.session = {
+  //   key: 'EGG_SESS', // eggjs默认session的key
+  //   maxAge: 24 * 3600 * 1000, // 1 day
+  //   httpOnly: true,
+  //   encrypt: true,
+  //   // renew: true, // 每次访问页面都会给session会话延长时间
+  // };
+
   config.security = {
     csrf: {
       enable: false,
@@ -58,7 +67,25 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1583853572223_3282';
 
   // add your middleware config here
-  config.middleware = [];
+  config.middleware = [ 'intercept' ];
+
+  // 配置白名单，需要登录的接口
+  config.intercept = {
+    whiteUrls: [
+      '/api/book/getList',
+      '/api/bill/getList',
+      '/api/book/add',
+      '/api/book/update',
+      '/api/book/getList',
+      '/api/bill/add',
+      '/api/bill/update',
+      '/api/bill/getList',
+    ],
+  };
+
+  config.jwt = {
+    secret: 'feifei', // 自己设置的值
+  };
 
   // add your user config here
   const userConfig = {
